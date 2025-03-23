@@ -126,5 +126,16 @@ jobs:
     needs: [helm-ci, docker-ci]
     secrets: inherit
     with:
-      environment: dev
+      environment: development
       version: ${{ github.sha }}
+
+  deploy-helm-staging:
+    name: Deploy Helm
+    uses: ./.github/workflows/deployment-workflow.yml
+    needs: deploy-helm-dev
+    secrets: inherit
+    with:
+      environment: staging
+      version: ${{ github.sha }}
+      helm-values-path: ./todoapp/values/stg.yaml
+      helm-release-name: todoapp-staging
